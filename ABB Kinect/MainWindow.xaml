@@ -8,13 +8,13 @@
 				<GridView.ColumnHeaderContextMenu>
 					<ContextMenu/>
 				</GridView.ColumnHeaderContextMenu>
-				<GridViewColumn Header="IP Address" Width="150"/>
-				<GridViewColumn Header="ID" Width="100"/>
-				<GridViewColumn Header="Availability" Width="80"/>
-				<GridViewColumn Header="Virtual" Width="60"/>
-				<GridViewColumn Header="System name" Width="150"/>
-				<GridViewColumn Header="RW Version" Width="120"/>
-				<GridViewColumn Header="Controller Name" Width="100"/>
+				<GridViewColumn Header="IP Address" DisplayMemberBinding="{Binding Path=IPAddress}" Width="150"/>
+				<GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=ID}" Width="100"/>
+				<GridViewColumn Header="Availability" DisplayMemberBinding="{Binding Path=Availability}" Width="80"/>
+				<GridViewColumn Header="Virtual" DisplayMemberBinding="{Binding Path=IsVirtual}" Width="60"/>
+				<GridViewColumn Header="System name" DisplayMemberBinding="{Binding Path=SystemName}" Width="150"/>
+				<GridViewColumn Header="RW Version" DisplayMemberBinding="{Binding Path=Version}" Width="120"/>
+				<GridViewColumn Header="Controller Name" DisplayMemberBinding="{Binding Path=ControllerName}" Width="100"/>
 			</GridView>
 		</ListView.View>
 	</ListView>

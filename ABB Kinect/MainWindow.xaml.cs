@@ -26,6 +26,17 @@ namespace ABB_Kinect
 		private NetworkScanner scanner = null;
 		private Controller controller = null;
 
+		public class ListNetworkControllerABB
+		{
+			public string IPAddress{ get; set; }
+			public string Id{ get; set; }
+			public string Availability{ get; set; }
+			public string IsVirtual{ get; set; }
+			public string SystemName{ get; set; }
+			public string Version{ get; set; }
+			public string ControllerName{ get; set; }
+		}
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -45,7 +56,17 @@ namespace ABB_Kinect
 			ControllerInfoCollection controllers = scanner.Controllers;
 			foreach (ControllerInfo controllerInfo in controllers)
 			{
-				ListOfDevices.Items.Add(controllerInfo.IPAddress.ToString());
+				ListNetworkControllerABB NetABB = new ListNetworkControllerABB()
+				{
+					IPAddress = controllerInfo.IPAddress.ToString(),
+					Id = controllerInfo.Id,
+					Availability = controllerInfo.Availability.ToString(),
+					IsVirtual = controllerInfo.IsVirtual.ToString(),
+					SystemName = controllerInfo.SystemName,
+					Version = controllerInfo.Version.ToString(),
+					ControllerName = controllerInfo.ControllerName
+				};
+				ListOfDevices.Items.Add(NetABB);
 			}
 		}
 	}
