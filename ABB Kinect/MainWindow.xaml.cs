@@ -24,7 +24,6 @@ namespace ABB_Kinect
 	public partial class MainWindow : Window
 	{
 		private NetworkScanner scanner = null;
-		private Controller controller = null;
 
 		public class ListNetworkControllerABB
 		{
@@ -40,7 +39,6 @@ namespace ABB_Kinect
 		public MainWindow()
 		{
 			InitializeComponent();
-			ListOfDevices.Items.Add("coś");
 			ScanNetwork();
 		}
 
@@ -69,5 +67,6 @@ namespace ABB_Kinect
 				ListOfDevices.Items.Add(NetABB);
 			}
 		}
+
 	}
 }
