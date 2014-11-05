@@ -24,6 +24,7 @@ namespace ABB_Kinect
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		private bool ABBConnectionEstablished = false;
 		private ListNetworkControllerABB NetABB = null;
 		private NetworkScanner Scanner = null;
 		private NetworkWatcher Watcher = null;
@@ -42,6 +43,7 @@ namespace ABB_Kinect
 		public MainWindow()
 		{
 			InitializeComponent();
+			InitializeControlsAndIndicators();
 			InitializeNetworkWatcher();
 			ScanNetwork();
 		}
@@ -56,20 +58,10 @@ namespace ABB_Kinect
 			Watcher.EnableRaisingEvents = true;
 		}
 
-		private void HandleFoundABBEvent(object source, NetworkWatcherEventArgs e)
+		private void InitializeControlsAndIndicators()
 		{
-			ControllerInfo Info = e.Controller;
-			GetInfoABB(Info);
-			ListOfDevices.Dispatcher.Invoke
-			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
-			{
-				ListOfDevices.Items.Add(NetABB);
-			}));
-		}
-
-		private void HandleLostABBEvent(object source, NetworkWatcherEventArgs e)
-		{
-			ScanNetwork();
+			ConnectDisconnectButton.IsEnabled = false;
+			StatusTextBlock.Text = "Disconnected";
 		}
 
 		private void GetInfoABB(ControllerInfo controllerInfo)
@@ -91,19 +83,46 @@ namespace ABB_Kinect
 
 			ListOfDevices.Dispatcher.Invoke
 				(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
-			{
-				ListOfDevices.Items.Clear();
-			}));
+				{
+					ListOfDevices.Items.Clear();
+				}));
 
 			foreach (ControllerInfo controllerInfo in controllers)
 			{
 				GetInfoABB(controllerInfo);
 				ListOfDevices.Dispatcher.Invoke
 					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
-				{
-					ListOfDevices.Items.Add(NetABB); 
-				}));
+					{
+						ListOfDevices.Items.Add(NetABB);
+					}));
 			}
+		}
+		
+		private void HandleFoundABBEvent(object source, NetworkWatcherEventArgs e)
+		{
+			ControllerInfo Info = e.Controller;
+			GetInfoABB(Info);
+			ListOfDevices.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				ListOfDevices.Items.Add(NetABB);
+			}));
+		}
+
+		private void HandleLostABBEvent(object source, NetworkWatcherEventArgs e)
+		{
+			ScanNetwork();
+		}
+
+		private void ListOfDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (!ABBConnectionEstablished)
+				ConnectDisconnectButton.IsEnabled = true;
+		}
+
+		private void ExitButton_Click(object sender, RoutedEventArgs e)
+		{
+			this.Close();
 		}
 	}
 }
