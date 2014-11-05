@@ -19,7 +19,7 @@
 				</GridView>
 			</ListView.View>
 		</ListView>
-		<Button x:Name="ConnectDisconnectButton" Content="Connect" HorizontalAlignment="Left" Margin="468,141,0,0" VerticalAlignment="Top" Width="76"/>
+		<Button x:Name="ConnectDisconnectButton" Content="Connect" HorizontalAlignment="Left" Margin="468,141,0,0" VerticalAlignment="Top" Width="76" Click="ConnectDisconnectButton_Click"/>
 		<Button x:Name="ExitButton" Content="Exit" HorizontalAlignment="Left" Margin="549,141,0,0" VerticalAlignment="Top" Width="75" Foreground="Red" Click="ExitButton_Click"/>
 		<TextBlock x:Name="StatusTextBlock" HorizontalAlignment="Left" Margin="10,145,0,0" TextWrapping="Wrap" Text="Status" VerticalAlignment="Top" Width="200" FontWeight="Bold"/>
 	</Grid>

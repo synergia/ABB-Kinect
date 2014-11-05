@@ -24,10 +24,11 @@ namespace ABB_Kinect
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private bool ABBConnectionEstablished = false;
 		private ListNetworkControllerABB NetABB = null;
 		private NetworkScanner Scanner = null;
 		private NetworkWatcher Watcher = null;
+		private Controller ABBController = null;
+		private ListViewItem SelectedABB = null;
 
 		private class ListNetworkControllerABB
 		{
@@ -46,6 +47,7 @@ namespace ABB_Kinect
 			InitializeControlsAndIndicators();
 			InitializeNetworkWatcher();
 			ScanNetwork();
+			ListOfDevices.IsSynchronizedWithCurrentItem = true;
 		}
 
 		private void InitializeNetworkWatcher()
@@ -116,13 +118,39 @@ namespace ABB_Kinect
 
 		private void ListOfDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (!ABBConnectionEstablished)
+			if (ABBController == null) // Connection wasn't established
 				ConnectDisconnectButton.IsEnabled = true;
+			ListNetworkControllerABB dupa = ((sender as ListView).SelectedItem as ListNetworkControllerABB);
 		}
 
 		private void ExitButton_Click(object sender, RoutedEventArgs e)
 		{
 			this.Close();
+		}
+
+		private void ConnectDisconnectButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (SelectedABB.Tag != null)
+			{
+				ControllerInfo Info = SelectedABB.Tag as ControllerInfo;
+				if (Info.Availability == Availability.Available)
+				{
+					if (ABBController != null) // to connect can't be other connection
+					{
+						ABBController.Logoff();
+						ABBController.Dispose();
+						ABBController = null;
+					}
+					// Login into controller
+					ABBController = ControllerFactory.CreateFrom(Info);
+					ABBController.Logon(UserInfo.DefaultUser);
+					MessageBox.Show("Connection Established");
+				}
+				else
+				{
+					MessageBox.Show("Selected controller not available.");
+				}
+			}
 		}
 	}
 }
