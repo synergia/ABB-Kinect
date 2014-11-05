@@ -45,25 +45,32 @@ namespace ABB_Kinect
 			InitializeRefreshTimer();
 		}
 
-		public void InitializeRefreshTimer()
+		private void InitializeRefreshTimer()
 		{
-			RefreshTimer = new Timer(1000);
+			RefreshTimer = new Timer(3000);
 			RefreshTimer.Elapsed += new ElapsedEventHandler(RefreshNetworkEvent);
 			RefreshTimer.AutoReset = true;
 			RefreshTimer.Enabled = true;
 			NetABB = new ListNetworkControllerABB();
 		}
 
-		public void RefreshNetworkEvent(object source, ElapsedEventArgs e)
+		private void RefreshNetworkEvent(object source, ElapsedEventArgs e)
 		{
 			ScanNetwork();
 		}
 
-		public void ScanNetwork()
+		private void ScanNetwork()
 		{
 			scanner = new NetworkScanner();
 			scanner.Scan();
 			ControllerInfoCollection controllers = scanner.Controllers;
+
+			ListOfDevices.Dispatcher.Invoke
+				(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				ListOfDevices.Items.Clear();
+			}));
+
 			foreach (ControllerInfo controllerInfo in controllers)
 			{
 				NetABB.IPAddress = controllerInfo.IPAddress.ToString();
@@ -73,9 +80,10 @@ namespace ABB_Kinect
 				NetABB.SystemName = controllerInfo.SystemName;
 				NetABB.Version = controllerInfo.Version.ToString();
 				NetABB.ControllerName = controllerInfo.ControllerName;
-				ListOfDevices.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+				ListOfDevices.Dispatcher.Invoke
+					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
 				{
-					ListOfDevices.Items.Add(NetABB);
+					ListOfDevices.Items.Add(NetABB); 
 				}));
 			}
 		}
