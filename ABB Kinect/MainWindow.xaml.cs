@@ -24,11 +24,11 @@ namespace ABB_Kinect
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		public ListNetworkControllerABB NetABB = null;
-		private NetworkScanner scanner = null;
-		private Timer RefreshTimer = null;
+		private ListNetworkControllerABB NetABB = null;
+		private NetworkScanner Scanner = null;
+		private NetworkWatcher Watcher = null;
 
-		public class ListNetworkControllerABB
+		private class ListNetworkControllerABB
 		{
 			public string IPAddress{ get; set; }
 			public string Id{ get; set; }
@@ -42,28 +42,52 @@ namespace ABB_Kinect
 		public MainWindow()
 		{
 			InitializeComponent();
-			InitializeRefreshTimer();
+			InitializeNetworkWatcher();
+			ScanNetwork();
 		}
 
-		private void InitializeRefreshTimer()
+		private void InitializeNetworkWatcher()
 		{
-			RefreshTimer = new Timer(3000);
-			RefreshTimer.Elapsed += new ElapsedEventHandler(RefreshNetworkEvent);
-			RefreshTimer.AutoReset = true;
-			RefreshTimer.Enabled = true;
 			NetABB = new ListNetworkControllerABB();
+			Scanner = new NetworkScanner();
+			Watcher = new NetworkWatcher(Scanner.Controllers);
+			Watcher.Found += new EventHandler<NetworkWatcherEventArgs>(HandleFoundABBEvent);
+			Watcher.Lost += new EventHandler<NetworkWatcherEventArgs>(HandleLostABBEvent);
+			Watcher.EnableRaisingEvents = true;
 		}
 
-		private void RefreshNetworkEvent(object source, ElapsedEventArgs e)
+		private void HandleFoundABBEvent(object source, NetworkWatcherEventArgs e)
+		{
+			ControllerInfo Info = e.Controller;
+			GetInfoABB(Info);
+			ListOfDevices.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				ListOfDevices.Items.Add(NetABB);
+			}));
+		}
+
+		private void HandleLostABBEvent(object source, NetworkWatcherEventArgs e)
 		{
 			ScanNetwork();
 		}
 
+		private void GetInfoABB(ControllerInfo controllerInfo)
+		{
+			NetABB.IPAddress = controllerInfo.IPAddress.ToString();
+			NetABB.Id = controllerInfo.Id;
+			NetABB.Availability = controllerInfo.Availability.ToString();
+			NetABB.IsVirtual = controllerInfo.IsVirtual.ToString();
+			NetABB.SystemName = controllerInfo.SystemName;
+			NetABB.Version = controllerInfo.Version.ToString();
+			NetABB.ControllerName = controllerInfo.ControllerName;
+		}
+
 		private void ScanNetwork()
 		{
-			scanner = new NetworkScanner();
-			scanner.Scan();
-			ControllerInfoCollection controllers = scanner.Controllers;
+			NetworkScanner Scanner = new NetworkScanner();
+			Scanner.Scan();
+			ControllerInfoCollection controllers = Scanner.Controllers;
 
 			ListOfDevices.Dispatcher.Invoke
 				(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
@@ -73,13 +97,7 @@ namespace ABB_Kinect
 
 			foreach (ControllerInfo controllerInfo in controllers)
 			{
-				NetABB.IPAddress = controllerInfo.IPAddress.ToString();
-				NetABB.Id = controllerInfo.Id;
-				NetABB.Availability = controllerInfo.Availability.ToString();
-				NetABB.IsVirtual = controllerInfo.IsVirtual.ToString();
-				NetABB.SystemName = controllerInfo.SystemName;
-				NetABB.Version = controllerInfo.Version.ToString();
-				NetABB.ControllerName = controllerInfo.ControllerName;
+				GetInfoABB(controllerInfo);
 				ListOfDevices.Dispatcher.Invoke
 					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
 				{
