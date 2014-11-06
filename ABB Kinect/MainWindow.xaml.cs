@@ -24,7 +24,9 @@ namespace ABB_Kinect
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private ListNetworkControllerABB NetABB = null; // variable which contains info about ABB, it is used in different funtions as a temporary variable
+		// variable which contains info about ABB, it is used in different funtions as a temporary variable
+		private ListNetworkControllerABB NetABB = null;
+
 		private NetworkScanner Scanner = null;
 		private NetworkWatcher Watcher = null;
 		private Controller ActiveABBController = null; // when connection is established it contains data about active ABB
@@ -157,6 +159,7 @@ namespace ABB_Kinect
 					ActiveABBController.Logon(UserInfo.DefaultUser);
 					DisconnectButton.IsEnabled = true;
 					ConnectButton.IsEnabled = false;
+					StatusTextBlock.Text = "Connected " + ActiveABBController.IPAddress.ToString();
 					MessageBox.Show("Connection Established");
 				}
 				else
@@ -171,6 +174,7 @@ namespace ABB_Kinect
 			DisconnectABB();
 			DisconnectButton.IsEnabled = false;
 			ConnectButton.IsEnabled = true;
+			StatusTextBlock.Text = "Disconnected";
 		}
 	}
 }
