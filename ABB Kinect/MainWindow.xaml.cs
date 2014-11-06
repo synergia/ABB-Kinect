@@ -24,11 +24,11 @@ namespace ABB_Kinect
 	/// </summary>
 	public partial class MainWindow : Window
 	{
-		private ListNetworkControllerABB NetABB = null;
+		private ListNetworkControllerABB NetABB = null; // variable which contains info about ABB, it is used in different funtions as a temporary variable
 		private NetworkScanner Scanner = null;
 		private NetworkWatcher Watcher = null;
-		private Controller ABBController = null;
-		private ListViewItem SelectedABB = null;
+		private Controller ActiveABBController = null; // when connection is established it contains data about active ABB
+		private List<ControllerInfo> ListOfABBControllers = new List<ControllerInfo>(); // ABB controller is added to this list when is found
 
 		private class ListNetworkControllerABB
 		{
@@ -47,7 +47,6 @@ namespace ABB_Kinect
 			InitializeControlsAndIndicators();
 			InitializeNetworkWatcher();
 			ScanNetwork();
-			ListOfDevices.IsSynchronizedWithCurrentItem = true;
 		}
 
 		private void InitializeNetworkWatcher()
@@ -79,6 +78,7 @@ namespace ABB_Kinect
 
 		private void ScanNetwork()
 		{
+			ListOfABBControllers.Clear();
 			NetworkScanner Scanner = new NetworkScanner();
 			Scanner.Scan();
 			ControllerInfoCollection controllers = Scanner.Controllers;
@@ -97,6 +97,7 @@ namespace ABB_Kinect
 					{
 						ListOfDevices.Items.Add(NetABB);
 					}));
+				ListOfABBControllers.Add(controllerInfo);
 			}
 		}
 		
@@ -109,6 +110,7 @@ namespace ABB_Kinect
 			{
 				ListOfDevices.Items.Add(NetABB);
 			}));
+			ListOfABBControllers.Add(Info);
 		}
 
 		private void HandleLostABBEvent(object source, NetworkWatcherEventArgs e)
@@ -118,9 +120,8 @@ namespace ABB_Kinect
 
 		private void ListOfDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (ABBController == null) // Connection wasn't established
+			if (ActiveABBController == null) // Connection wasn't established
 				ConnectDisconnectButton.IsEnabled = true;
-			ListNetworkControllerABB dupa = ((sender as ListView).SelectedItem as ListNetworkControllerABB);
 		}
 
 		private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -130,20 +131,21 @@ namespace ABB_Kinect
 
 		private void ConnectDisconnectButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (SelectedABB.Tag != null)
+			if (ListOfDevices.SelectedItems.Count == 1)
 			{
-				ControllerInfo Info = SelectedABB.Tag as ControllerInfo;
+				ControllerInfo Info = ListOfABBControllers.ElementAt(ListOfDevices.SelectedIndex);
+
 				if (Info.Availability == Availability.Available)
 				{
-					if (ABBController != null) // to connect can't be other connection
+					if (ActiveABBController != null) // to connect can't be other connection
 					{
-						ABBController.Logoff();
-						ABBController.Dispose();
-						ABBController = null;
+						ActiveABBController.Logoff();
+						ActiveABBController.Dispose();
+						ActiveABBController = null;
 					}
 					// Login into controller
-					ABBController = ControllerFactory.CreateFrom(Info);
-					ABBController.Logon(UserInfo.DefaultUser);
+					ActiveABBController = ControllerFactory.CreateFrom(Info);
+					ActiveABBController.Logon(UserInfo.DefaultUser);
 					MessageBox.Show("Connection Established");
 				}
 				else
