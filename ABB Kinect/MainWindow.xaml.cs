@@ -61,7 +61,8 @@ namespace ABB_Kinect
 
 		private void InitializeControlsAndIndicators()
 		{
-			ConnectDisconnectButton.IsEnabled = false;
+			ConnectButton.IsEnabled = false;
+			DisconnectButton.IsEnabled = false;
 			StatusTextBlock.Text = "Disconnected";
 		}
 
@@ -101,6 +102,16 @@ namespace ABB_Kinect
 			}
 		}
 		
+		private void DisconnectABB()
+		{
+			if (ActiveABBController != null)
+			{
+				ActiveABBController.Logoff();
+				ActiveABBController.Dispose();
+				ActiveABBController = null;
+			}
+		}
+
 		private void HandleFoundABBEvent(object source, NetworkWatcherEventArgs e)
 		{
 			ControllerInfo Info = e.Controller;
@@ -121,15 +132,16 @@ namespace ABB_Kinect
 		private void ListOfDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (ActiveABBController == null) // Connection wasn't established
-				ConnectDisconnectButton.IsEnabled = true;
+				ConnectButton.IsEnabled = true;
 		}
 
 		private void ExitButton_Click(object sender, RoutedEventArgs e)
 		{
+			DisconnectABB();
 			this.Close();
 		}
 
-		private void ConnectDisconnectButton_Click(object sender, RoutedEventArgs e)
+		private void ConnectButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (ListOfDevices.SelectedItems.Count == 1)
 			{
@@ -138,14 +150,13 @@ namespace ABB_Kinect
 				if (Info.Availability == Availability.Available)
 				{
 					if (ActiveABBController != null) // to connect can't be other connection
-					{
-						ActiveABBController.Logoff();
-						ActiveABBController.Dispose();
-						ActiveABBController = null;
-					}
+						DisconnectABB();
+					
 					// Login into controller
 					ActiveABBController = ControllerFactory.CreateFrom(Info);
 					ActiveABBController.Logon(UserInfo.DefaultUser);
+					DisconnectButton.IsEnabled = true;
+					ConnectButton.IsEnabled = false;
 					MessageBox.Show("Connection Established");
 				}
 				else
@@ -153,6 +164,13 @@ namespace ABB_Kinect
 					MessageBox.Show("Selected controller not available.");
 				}
 			}
+		}
+
+		private void DisconnectButton_Click(object sender, RoutedEventArgs e)
+		{
+			DisconnectABB();
+			DisconnectButton.IsEnabled = false;
+			ConnectButton.IsEnabled = true;
 		}
 	}
 }
