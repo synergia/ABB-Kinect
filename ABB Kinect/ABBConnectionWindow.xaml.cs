@@ -139,9 +139,15 @@ namespace ABB_Kinect
 					{
 						angles = (JointTarget)rd.Value;
 						angles = GetAnglesFromSliders(angles);
+
+						FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
+						ABB.Robotics.Controllers.RapidDomain.Bool rapidBool = new ABB.Robotics.Controllers.RapidDomain.Bool();
+						rapidBool.Value = true;
+						
 						using (Mastership m = Mastership.Request(ABBController.Rapid))
 						{
 							rd.Value = angles;
+							FlagExec.Value = rapidBool;
 						}
 					}
 					else
@@ -201,11 +207,15 @@ namespace ABB_Kinect
 		private void ReadyState() // Green light, enabled controls...
 		{
 			ReadyLED.Background = Brushes.LimeGreen;
+			TabControl.IsEnabled = true;
+			ResetPositionButton.IsEnabled = true;
 		}
 
 		private void BusyState() // Yellow light, disabled controls...
 		{
 			ReadyLED.Background = Brushes.Yellow;
+			TabControl.IsEnabled = false;
+			ResetPositionButton.IsEnabled = false;
 		}
 
 		private void ErrorState() // Red light...
@@ -284,8 +294,12 @@ namespace ABB_Kinect
 
 		private void Joint1Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			Joint1TextBlock.Text = ((int)Joint1Slider.Value).ToString();
-			SetNewJointsAngles();
+			this.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				Joint1TextBlock.Text = ((int)Joint1Slider.Value).ToString();
+				SetNewJointsAngles();
+			}));
 		}
 
 		private void Joint2Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
