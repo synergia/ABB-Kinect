@@ -198,6 +198,21 @@ namespace ABB_Kinect
 			Joint6Slider.Value = angles.RobAx.Rax_6;
 		}
 
+		private void ReadyState() // Green light, enabled controls...
+		{
+			ReadyLED.Background = Brushes.LimeGreen;
+		}
+
+		private void BusyState() // Yellow light, disabled controls...
+		{
+			ReadyLED.Background = Brushes.Yellow;
+		}
+
+		private void ErrorState() // Red light...
+		{
+			ReadyLED.Background = Brushes.Red;
+		}
+
 		// EVENTS
 		private void SupervisorTimerElapsed(Object sender, ElapsedEventArgs e)
 		{
@@ -208,17 +223,16 @@ namespace ABB_Kinect
 					tasks = ABBController.Rapid.GetTasks();
 					FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
 
-					tempTextBlock.Dispatcher.Invoke
+					ReadyLED.Dispatcher.Invoke
 					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
 					{
 						if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagExec.Value == true)
 						{
-
-							tempTextBlock.Text = "TRUE";
+							BusyState();
 						}
 						else // false
 						{
-							tempTextBlock.Text = "FALSE";
+							ReadyState();
 						}
 					}));
 				}

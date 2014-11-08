@@ -30,7 +30,6 @@
 						<TextBlock x:Name="Joint4TextBlock" HorizontalAlignment="Left" Margin="366,93,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<TextBlock x:Name="Joint5TextBlock" HorizontalAlignment="Left" Margin="366,119,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<TextBlock x:Name="Joint6TextBlock" HorizontalAlignment="Left" Margin="366,145,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
-						<TextBlock x:Name="tempTextBlock" HorizontalAlignment="Left" Margin="66,194,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 					</Grid>
 				</TabItem>
 				<TabItem Header="Kinect Mode">
@@ -39,6 +38,7 @@
 			</TabControl>
 			<Image HorizontalAlignment="Left" Height="112" Margin="491,246,0,0" VerticalAlignment="Top" Width="113" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\logo_wmech.gif" RenderTransformOrigin="0.923,0.448"/>
 			<Image HorizontalAlignment="Left" Height="58" Margin="329,363,0,0" VerticalAlignment="Top" Width="275" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\Pwr-logo.png" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="1"/>
+			<Border x:Name="ReadyLED" BorderBrush="Black" Background="Red" BorderThickness="1" HorizontalAlignment="Left" Height="20" Margin="417,73,0,0" VerticalAlignment="Top" Width="20"/>
 		</Grid>
 
 	</Grid>
