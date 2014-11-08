@@ -9,7 +9,7 @@
 					<GridView.ColumnHeaderContextMenu>
 						<ContextMenu/>
 					</GridView.ColumnHeaderContextMenu>
-					<GridViewColumn Header="IP Address" DisplayMemberBinding="{Binding IPAddress}" Width="80"/>
+					<GridViewColumn Header="IP Address" DisplayMemberBinding="{Binding IPAddress}" Width="100"/>
 					<GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="50"/>
 					<GridViewColumn Header="Availability" DisplayMemberBinding="{Binding Availability}" Width="80"/>
 					<GridViewColumn Header="Virtual" DisplayMemberBinding="{Binding IsVirtual}" Width="60"/>

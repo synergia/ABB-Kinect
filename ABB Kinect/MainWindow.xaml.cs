@@ -31,6 +31,7 @@ namespace ABB_Kinect
 		private NetworkWatcher Watcher = null;
 		private Controller ActiveABBController = null; // when connection is established it contains data about active ABB
 		private List<ControllerInfo> ListOfABBControllers = new List<ControllerInfo>(); // ABB controller is added to this list when is found
+		private ABBConnectionWindow ABBWindow = null; // this window will be opened when connection is established
 
 		private class ListNetworkControllerABB
 		{
@@ -81,6 +82,8 @@ namespace ABB_Kinect
 
 		private void ScanNetwork()
 		{
+			ConnectButton.IsEnabled = false;
+
 			ListOfABBControllers.Clear();
 			NetworkScanner Scanner = new NetworkScanner();
 			Scanner.Scan();
@@ -112,6 +115,14 @@ namespace ABB_Kinect
 				ActiveABBController.Dispose();
 				ActiveABBController = null;
 			}
+			DisconnectButton.IsEnabled = false;
+			ConnectButton.IsEnabled = false;
+			StatusTextBlock.Text = "Disconnected";
+			ListOfDevices.UnselectAll();
+			if (ABBWindow != null)
+			{
+				ABBWindow.Close();
+			}
 		}
 
 		private void HandleFoundABBEvent(object source, NetworkWatcherEventArgs e)
@@ -129,11 +140,12 @@ namespace ABB_Kinect
 		private void HandleLostABBEvent(object source, NetworkWatcherEventArgs e)
 		{
 			ScanNetwork();
+			DisconnectABB();
 		}
 
 		private void ListOfDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (ActiveABBController == null) // Connection wasn't established
+			if (ActiveABBController == null && ListOfDevices.HasItems && ListOfDevices.SelectedItems.Count > 0) // Connection wasn't established
 				ConnectButton.IsEnabled = true;
 		}
 
@@ -160,7 +172,9 @@ namespace ABB_Kinect
 					DisconnectButton.IsEnabled = true;
 					ConnectButton.IsEnabled = false;
 					StatusTextBlock.Text = "Connected " + ActiveABBController.IPAddress.ToString();
-					MessageBox.Show("Connection Established");
+
+					ABBWindow = new ABBConnectionWindow(ActiveABBController);
+					ABBWindow.Closed += ABBWindow_Closed;
 				}
 				else
 				{
@@ -172,9 +186,12 @@ namespace ABB_Kinect
 		private void DisconnectButton_Click(object sender, RoutedEventArgs e)
 		{
 			DisconnectABB();
-			DisconnectButton.IsEnabled = false;
-			ConnectButton.IsEnabled = true;
-			StatusTextBlock.Text = "Disconnected";
+		}
+		
+		private void ABBWindow_Closed(object sender, System.EventArgs e)
+		{
+			ABBWindow = null;
+			DisconnectABB();
 		}
 	}
 }

@@ -14,3 +14,5 @@ C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\bin\D
 C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\bin\Debug\ABB.Robotics.Controllers.PC.xml
 C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Debug\ABB Kinect.exe
 C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Debug\ABB Kinect.pdb
+C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Debug\ABBConnectionWindow.baml
+C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Debug\ABBConnectionWindow.g.cs
