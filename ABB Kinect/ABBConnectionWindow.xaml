@@ -9,6 +9,35 @@
 			<TextBlock x:Name="ABBWindowTitleLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="427" Margin="10,0,0,0" FontSize="20" FontWeight="Bold"><Run Language="en-gb" Text="Connected to "/></TextBlock>
 			<TextBlock x:Name="ABBWindowNameLabel" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="427"><Run Language="en-gb" Text="Controller Name"/></TextBlock>
 			<Button x:Name="ResetPositionButton" Content="Reset Position" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Width="90" FontStyle="Italic" Foreground="#FF087A03" Click="ResetPositionButton_Click"/>
+			<TabControl HorizontalAlignment="Left" Height="285" Margin="10,73,0,0" VerticalAlignment="Top" Width="432">
+				<TabItem Header="Manual Mode" Margin="-2,0" RenderTransformOrigin="1.746,0.545">
+					<Grid Background="#FFE5E5E5">
+						<Label Content="Joint 1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,-0.346"/>
+						<Label Content="Joint 2" HorizontalAlignment="Left" Margin="10,36,0,0" VerticalAlignment="Top"/>
+						<Label Content="Joint 3" HorizontalAlignment="Left" Margin="10,62,0,0" VerticalAlignment="Top"/>
+						<Label Content="Joint 4" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top"/>
+						<Label Content="Joint 5" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
+						<Label Content="Joint 6" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top"/>
+						<Slider x:Name="Joint1Slider" HorizontalAlignment="Left" Margin="55,13,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint1Slider_ValueChanged"/>
+						<Slider x:Name="Joint2Slider" HorizontalAlignment="Left" Margin="55,41,0,0" VerticalAlignment="Top" RenderTransformOrigin="-11.75,-0.833" Width="306" ValueChanged="Joint2Slider_ValueChanged"/>
+						<Slider x:Name="Joint3Slider" HorizontalAlignment="Left" Margin="55,67,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint3Slider_ValueChanged"/>
+						<Slider x:Name="Joint4Slider" HorizontalAlignment="Left" Margin="55,93,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint4Slider_ValueChanged"/>
+						<Slider x:Name="Joint5Slider" HorizontalAlignment="Left" Margin="55,119,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint5Slider_ValueChanged"/>
+						<Slider x:Name="Joint6Slider" HorizontalAlignment="Left" Margin="55,145,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint6Slider_ValueChanged"/>
+						<TextBlock x:Name="Joint1TextBlock" HorizontalAlignment="Left" Margin="366,13,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+						<TextBlock x:Name="Joint2TextBlock" HorizontalAlignment="Left" Margin="366,41,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+						<TextBlock x:Name="Joint3TextBlock" HorizontalAlignment="Left" Margin="366,67,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+						<TextBlock x:Name="Joint4TextBlock" HorizontalAlignment="Left" Margin="366,93,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+						<TextBlock x:Name="Joint5TextBlock" HorizontalAlignment="Left" Margin="366,119,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+						<TextBlock x:Name="Joint6TextBlock" HorizontalAlignment="Left" Margin="366,145,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+					</Grid>
+				</TabItem>
+				<TabItem Header="Kinect Mode">
+					<Grid Background="#FFE5E5E5"/>
+				</TabItem>
+			</TabControl>
+			<Image HorizontalAlignment="Left" Height="112" Margin="491,246,0,0" VerticalAlignment="Top" Width="113" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\logo_wmech.gif" RenderTransformOrigin="0.923,0.448"/>
+			<Image HorizontalAlignment="Left" Height="58" Margin="329,363,0,0" VerticalAlignment="Top" Width="275" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\Pwr-logo.png" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="1"/>
 		</Grid>
 
 	</Grid>

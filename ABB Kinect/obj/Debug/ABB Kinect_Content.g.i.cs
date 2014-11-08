@@ -8,6 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("industrial_robot_sh.ico")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("resources/pwr-logo.png")]
 
 

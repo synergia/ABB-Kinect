@@ -111,10 +111,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\industrial_robot_sh.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="industrial_robot_sh.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Icon.ico" />
+    <Resource Include="Resources\handling-robots.jpg" />
+    <Resource Include="Resources\Logo_big.png" />
+    <Resource Include="Resources\logo_wmech.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PWr-logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
