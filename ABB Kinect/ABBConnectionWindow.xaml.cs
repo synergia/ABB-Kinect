@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Timers;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,7 +23,9 @@ namespace ABB_Kinect
 	public partial class ABBConnectionWindow : Window
 	{
 		private Controller ABBController = null;
+		private RapidData FlagExec = null;
 		private Task[] tasks = null;
+		private Timer SupervisorTimer = null;
 
 		public ABBConnectionWindow(Controller controller)
 		{
@@ -31,7 +34,9 @@ namespace ABB_Kinect
 			this.Title = "ABB " + ABBController.IPAddress.ToString();
 			ABBWindowTitleLabel.Text = "Connected to " + ABBController.IPAddress.ToString();
 			ABBWindowNameLabel.Text = ABBController.Name.ToString();
+
 			InitializeManualMode();
+			InitializeTimer();
 			this.Show();
 		}
 
@@ -83,6 +88,14 @@ namespace ABB_Kinect
 			GetCurrentJointsAngles();
 		}
 
+		private void InitializeTimer()
+		{
+			SupervisorTimer = new Timer(100); // check flags every 100 ms
+			SupervisorTimer.AutoReset = true;
+			SupervisorTimer.Elapsed += SupervisorTimerElapsed;
+			SupervisorTimer.Enabled = true;
+		}
+
 		private void GetCurrentJointsAngles()
 		{
 			try
@@ -91,10 +104,10 @@ namespace ABB_Kinect
 				{
 					tasks = ABBController.Rapid.GetTasks();
 					RapidData rd = tasks[0].GetRapidData("MainModule", "current_joints_angles");
-					ABB.Robotics.Controllers.RapidDomain.JointTarget angles = new ABB.Robotics.Controllers.RapidDomain.JointTarget();
-					if (rd.Value is ABB.Robotics.Controllers.RapidDomain.JointTarget)
+					JointTarget angles = new JointTarget();
+					if (rd.Value is JointTarget)
 					{
-						angles = (ABB.Robotics.Controllers.RapidDomain.JointTarget)rd.Value;
+						angles = (JointTarget)rd.Value;
 						SetSliders(angles);
 					}
 					else
@@ -113,6 +126,68 @@ namespace ABB_Kinect
 			}
 		}
 
+		private void SetNewJointsAngles()
+		{
+			try
+			{
+				if (ABBController.OperatingMode == ControllerOperatingMode.Auto)
+				{
+					tasks = ABBController.Rapid.GetTasks();
+					RapidData rd = tasks[0].GetRapidData("MainModule", "destination_joints_angles");
+					JointTarget angles = new JointTarget();
+					if (rd.Value is JointTarget)
+					{
+						angles = (JointTarget)rd.Value;
+						angles = GetAnglesFromSliders(angles);
+						using (Mastership m = Mastership.Request(ABBController.Rapid))
+						{
+							rd.Value = angles;
+						}
+					}
+					else
+						throw new InvalidProgramException();
+				}
+				else
+					MessageBox.Show("Automatic mode is required to start execution from a remote client.");
+			}
+			catch (System.InvalidProgramException ex)
+			{
+				MessageBox.Show("Wrong data type" + ex.Message);
+			}
+			catch (System.InvalidOperationException ex)
+			{
+				MessageBox.Show("Mastership is held by another client." + ex.Message);
+			}
+			catch (System.Exception ex)
+			{
+				MessageBox.Show("Unexpected error occured: " + ex.Message);
+			}
+		}
+
+		private JointTarget GetAnglesFromSliders(JointTarget a)
+		{
+			JointTarget angles = a;
+			angles.RobAx.Rax_1 = (float)Joint1Slider.Value;
+			angles.RobAx.Rax_2 = (float)Joint2Slider.Value;
+			angles.RobAx.Rax_3 = (float)Joint3Slider.Value;
+			angles.RobAx.Rax_4 = (float)Joint4Slider.Value;
+			angles.RobAx.Rax_5 = (float)Joint5Slider.Value;
+			angles.RobAx.Rax_6 = (float)Joint6Slider.Value;
+			return angles;
+		}
+		
+		private JointTarget GetAnglesFromArgument(JointTarget a, int A1, int A2, int A3, int A4, int A5, int A6)
+		{
+			JointTarget angles = a;
+			angles.RobAx.Rax_1 = A1;
+			angles.RobAx.Rax_2 = A2;
+			angles.RobAx.Rax_3 = A3;
+			angles.RobAx.Rax_4 = A4;
+			angles.RobAx.Rax_5 = A5;
+			angles.RobAx.Rax_6 = A6;
+			return angles;
+		}
+
 		private void SetSliders(ABB.Robotics.Controllers.RapidDomain.JointTarget angles)
 		{
 			Joint1Slider.Value = angles.RobAx.Rax_1;
@@ -121,6 +196,42 @@ namespace ABB_Kinect
 			Joint4Slider.Value = angles.RobAx.Rax_4;
 			Joint5Slider.Value = angles.RobAx.Rax_5;
 			Joint6Slider.Value = angles.RobAx.Rax_6;
+		}
+
+		// EVENTS
+		private void SupervisorTimerElapsed(Object sender, ElapsedEventArgs e)
+		{
+			try
+			{
+				if (ABBController.OperatingMode == ControllerOperatingMode.Auto)
+				{
+					tasks = ABBController.Rapid.GetTasks();
+					FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
+
+					tempTextBlock.Dispatcher.Invoke
+					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+					{
+						if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagExec.Value == true)
+						{
+
+							tempTextBlock.Text = "TRUE";
+						}
+						else // false
+						{
+							tempTextBlock.Text = "FALSE";
+						}
+					}));
+				}
+				else
+				{
+					MessageBox.Show("Automatic mode is required to start execution from a remote client.");
+					this.Close();
+				}
+			}
+			catch (System.Exception ex)
+			{
+				MessageBox.Show("Unexpected error occured: " + ex.Message);
+			}
 		}
 
 		private void ResetPositionButton_Click(object sender, RoutedEventArgs e)
@@ -132,10 +243,16 @@ namespace ABB_Kinect
 					tasks = ABBController.Rapid.GetTasks();
 					using (Mastership m = Mastership.Request(ABBController.Rapid))
 					{
-						RapidData rd = tasks[0].GetRapidData("MainModule", "flag_exec");
+						RapidData rd = tasks[0].GetRapidData("MainModule", "destination_joints_angles");
+						JointTarget angles = new JointTarget();
+						angles = (JointTarget)rd.Value;
+						angles = GetAnglesFromArgument(angles, 0, 0, 0, -90, 0, 0);
+						rd.Value = angles;
+
+						FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
 						ABB.Robotics.Controllers.RapidDomain.Bool rapidBool = new ABB.Robotics.Controllers.RapidDomain.Bool();
 						rapidBool.Value = true;
-						rd.Value = rapidBool;
+						FlagExec.Value = rapidBool;
 					}
 				}
 				else
@@ -154,6 +271,7 @@ namespace ABB_Kinect
 		private void Joint1Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			Joint1TextBlock.Text = ((int)Joint1Slider.Value).ToString();
+			SetNewJointsAngles();
 		}
 
 		private void Joint2Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
