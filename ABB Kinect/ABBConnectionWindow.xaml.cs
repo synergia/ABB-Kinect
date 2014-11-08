@@ -49,7 +49,6 @@ namespace ABB_Kinect
 						ABB.Robotics.Controllers.RapidDomain.Bool rapidBool = new ABB.Robotics.Controllers.RapidDomain.Bool();
 						rapidBool.Value = true;
 						rd.Value = rapidBool;
-						MessageBox.Show("Position was reset");
 					}
 				}
 				else

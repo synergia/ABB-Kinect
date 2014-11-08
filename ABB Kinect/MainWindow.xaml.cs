@@ -69,6 +69,18 @@ namespace ABB_Kinect
 			StatusTextBlock.Text = "Disconnected";
 		}
 
+		private ListNetworkControllerABB GetInfoABB(ControllerInfo controllerInfo, ListNetworkControllerABB NetABB)
+		{
+			NetABB.IPAddress = controllerInfo.IPAddress.ToString();
+			NetABB.Id = controllerInfo.Id;
+			NetABB.Availability = controllerInfo.Availability.ToString();
+			NetABB.IsVirtual = controllerInfo.IsVirtual.ToString();
+			NetABB.SystemName = controllerInfo.SystemName;
+			NetABB.Version = controllerInfo.Version.ToString();
+			NetABB.ControllerName = controllerInfo.ControllerName;
+			return NetABB;
+		}
+
 		private void GetInfoABB(ControllerInfo controllerInfo)
 		{
 			NetABB.IPAddress = controllerInfo.IPAddress.ToString();
@@ -97,11 +109,12 @@ namespace ABB_Kinect
 
 			foreach (ControllerInfo controllerInfo in controllers)
 			{
-				GetInfoABB(controllerInfo);
+				ListNetworkControllerABB ABBList = new ListNetworkControllerABB();
+				ABBList = GetInfoABB(controllerInfo,ABBList);
 				ListOfDevices.Dispatcher.Invoke
 					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
 					{
-						ListOfDevices.Items.Add(NetABB);
+						ListOfDevices.Items.Add(ABBList);
 					}));
 				ListOfABBControllers.Add(controllerInfo);
 			}
