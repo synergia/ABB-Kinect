@@ -112,6 +112,9 @@ namespace ABB_Kinect
 				UpdateTextBlockValues();
 				TurnONJointsEvents();
 			}));
+
+			SpeedTxtControl.TextChanged += SpeedTxtControl_TextChanged;
+			ABBController.MotionSystem.SpeedRatio = int.Parse(SpeedTxtControl.Text);
 		}
 
 		private void InitializeTimer()
@@ -425,6 +428,31 @@ namespace ABB_Kinect
 		private void Joint6Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
 			AnySliderValueChanged(sender as Slider, Joint6TextBlock);
+		}
+
+		private void SpeedTxtControl_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			int NumValue;
+			SpeedTxtControl.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				if (int.TryParse(SpeedTxtControl.Text, out NumValue))
+				{
+					if (NumValue > 100)
+					{
+						SpeedTxtControl.Text = 100.ToString();
+						NumValue = 100;
+					}
+					else if (NumValue < 0)
+					{
+						SpeedTxtControl.Text = 0.ToString();
+						NumValue = 0;
+					}
+					else
+						SpeedTxtControl.Text = NumValue.ToString();
+				}
+				ABBController.MotionSystem.SpeedRatio = NumValue;
+			}));
 		}
 	
 	}
