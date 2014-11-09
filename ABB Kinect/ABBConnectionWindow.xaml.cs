@@ -290,19 +290,32 @@ namespace ABB_Kinect
 			{
 				if (ABBController.OperatingMode == ControllerOperatingMode.Auto)
 				{
-					tasks = ABBController.Rapid.GetTasks();
-					FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
-
-					ReadyLED.Dispatcher.Invoke
+					this.Dispatcher.Invoke
 					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
 					{
-						if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagExec.Value == true)
+						tasks = ABBController.Rapid.GetTasks();
+						if (tasks[0].ExecutionStatus.ToString() == "Running")
 						{
-							BusyState();
+							FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
+
+							ReadyLED.Dispatcher.Invoke
+							(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+							{
+								if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagExec.Value == true)
+								{
+									BusyState();
+								}
+								else // false
+								{
+									ReadyState();
+								}
+							}));
 						}
-						else // false
+						else
 						{
-							ReadyState();
+							SupervisorTimer.Enabled = false;
+							MessageBox.Show("Run program on ABB first!", "ABB Error", MessageBoxButton.OK, MessageBoxImage.Error);
+							this.Close();
 						}
 					}));
 				}
