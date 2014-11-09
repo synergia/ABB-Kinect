@@ -39,6 +39,7 @@
 			<Image HorizontalAlignment="Left" Height="112" Margin="491,246,0,0" VerticalAlignment="Top" Width="113" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\logo_wmech.gif" RenderTransformOrigin="0.923,0.448"/>
 			<Image HorizontalAlignment="Left" Height="58" Margin="329,363,0,0" VerticalAlignment="Top" Width="275" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\Pwr-logo.png" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="1"/>
 			<Border x:Name="ReadyLED" BorderBrush="Black" Background="Red" BorderThickness="1" HorizontalAlignment="Left" Height="20" Margin="417,73,0,0" VerticalAlignment="Top" Width="20"/>
+			<Label Content="Created by Marcin Twardak" HorizontalAlignment="Left" Margin="243,72,0,0" VerticalAlignment="Top" Width="169" FontWeight="Bold"/>
 		</Grid>
 
 	</Grid>

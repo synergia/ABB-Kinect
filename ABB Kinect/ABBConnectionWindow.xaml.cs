@@ -22,6 +22,20 @@ namespace ABB_Kinect
 	/// </summary>
 	public partial class ABBConnectionWindow : Window
 	{
+		// Experimental constants to avoid crashes
+		private const int JOINT1MAX = 180;
+		private const int JOINT1MIN = -180;
+		private const int JOINT2MAX = 180;
+		private const int JOINT2MIN = -180;
+		private const int JOINT3MAX = 180;
+		private const int JOINT3MIN = -180;
+		private const int JOINT4MAX = 180;
+		private const int JOINT4MIN = -180;
+		private const int JOINT5MAX = 180;
+		private const int JOINT5MIN = -180;
+		private const int JOINT6MAX = 180;
+		private const int JOINT6MIN = -180;
+
 		private Controller ABBController = null;
 		private RapidData FlagExec = null;
 		private Task[] tasks = null;
@@ -42,43 +56,43 @@ namespace ABB_Kinect
 
 		private void InitializeManualMode()
 		{
-			Joint1Slider.Minimum = -180;
-			Joint1Slider.Maximum = 180;
+			Joint1Slider.Minimum = JOINT1MIN;
+			Joint1Slider.Maximum = JOINT1MAX;
 			Joint1Slider.TickFrequency = 1;
 			Joint1Slider.IsSnapToTickEnabled = true;
 			Joint1Slider.TickFrequency = 1;
 			Joint1Slider.LargeChange = 10;
 
-			Joint2Slider.Minimum = -180;
-			Joint2Slider.Maximum = 180;
+			Joint2Slider.Minimum = JOINT2MIN;
+			Joint2Slider.Maximum = JOINT2MAX;
 			Joint2Slider.TickFrequency = 1;
 			Joint2Slider.IsSnapToTickEnabled = true;
 			Joint2Slider.TickFrequency = 1;
 			Joint2Slider.LargeChange = 10;
 
-			Joint3Slider.Minimum = -180;
-			Joint3Slider.Maximum = 180;
+			Joint3Slider.Minimum = JOINT3MIN;
+			Joint3Slider.Maximum = JOINT3MAX;
 			Joint3Slider.TickFrequency = 1;
 			Joint3Slider.IsSnapToTickEnabled = true;
 			Joint3Slider.TickFrequency = 1;
 			Joint3Slider.LargeChange = 10;
 
-			Joint4Slider.Minimum = -180;
-			Joint4Slider.Maximum = 180;
+			Joint4Slider.Minimum = JOINT4MIN;
+			Joint4Slider.Maximum = JOINT4MAX;
 			Joint4Slider.TickFrequency = 1;
 			Joint4Slider.IsSnapToTickEnabled = true;
 			Joint4Slider.TickFrequency = 1;
 			Joint4Slider.LargeChange = 10;
 
-			Joint5Slider.Minimum = -180;
-			Joint5Slider.Maximum = 180;
+			Joint5Slider.Minimum = JOINT5MIN;
+			Joint5Slider.Maximum = JOINT5MAX;
 			Joint5Slider.TickFrequency = 1;
 			Joint5Slider.IsSnapToTickEnabled = true;
 			Joint5Slider.TickFrequency = 1;
 			Joint5Slider.LargeChange = 10;
 
-			Joint6Slider.Minimum = -180;
-			Joint6Slider.Maximum = 180;
+			Joint6Slider.Minimum = JOINT6MIN;
+			Joint6Slider.Maximum = JOINT6MAX;
 			Joint6Slider.TickFrequency = 1;
 			Joint6Slider.IsSnapToTickEnabled = true;
 			Joint6Slider.TickFrequency = 1;
@@ -314,7 +328,12 @@ namespace ABB_Kinect
 						else
 						{
 							SupervisorTimer.Enabled = false;
-							MessageBox.Show("Run program on ABB first!", "ABB Error", MessageBoxButton.OK, MessageBoxImage.Error);
+							RapidData FlagOutOfRange = tasks[0].GetRapidData("MainModule", "flag_out_of_range");
+							if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagOutOfRange.Value == true)
+								MessageBox.Show("Program stopped because of dangerous joint angles\nPlease back manually to safe position",
+									"ABB Out of range", MessageBoxButton.OK, MessageBoxImage.Warning);
+							else
+								MessageBox.Show("Run program on ABB first!", "ABB Error", MessageBoxButton.OK, MessageBoxImage.Error);
 							this.Close();
 						}
 					}));
