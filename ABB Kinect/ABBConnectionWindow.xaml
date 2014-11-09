@@ -30,6 +30,7 @@
 						<TextBlock x:Name="Joint4TextBlock" HorizontalAlignment="Left" Margin="366,93,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<TextBlock x:Name="Joint5TextBlock" HorizontalAlignment="Left" Margin="366,119,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<TextBlock x:Name="Joint6TextBlock" HorizontalAlignment="Left" Margin="366,145,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+						<CheckBox x:Name="DynamicModeCheckBox" Content="Dynamic Mode" HorizontalAlignment="Left" Margin="55,171,0,0" VerticalAlignment="Top"/>
 					</Grid>
 				</TabItem>
 				<TabItem Header="Kinect Mode">
