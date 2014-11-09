@@ -47,36 +47,42 @@ namespace ABB_Kinect
 			Joint1Slider.TickFrequency = 1;
 			Joint1Slider.IsSnapToTickEnabled = true;
 			Joint1Slider.TickFrequency = 1;
+			Joint1Slider.LargeChange = 10;
 
 			Joint2Slider.Minimum = -180;
 			Joint2Slider.Maximum = 180;
 			Joint2Slider.TickFrequency = 1;
 			Joint2Slider.IsSnapToTickEnabled = true;
 			Joint2Slider.TickFrequency = 1;
+			Joint2Slider.LargeChange = 10;
 
 			Joint3Slider.Minimum = -180;
 			Joint3Slider.Maximum = 180;
 			Joint3Slider.TickFrequency = 1;
 			Joint3Slider.IsSnapToTickEnabled = true;
 			Joint3Slider.TickFrequency = 1;
+			Joint3Slider.LargeChange = 10;
 
 			Joint4Slider.Minimum = -180;
 			Joint4Slider.Maximum = 180;
 			Joint4Slider.TickFrequency = 1;
 			Joint4Slider.IsSnapToTickEnabled = true;
 			Joint4Slider.TickFrequency = 1;
+			Joint4Slider.LargeChange = 10;
 
 			Joint5Slider.Minimum = -180;
 			Joint5Slider.Maximum = 180;
 			Joint5Slider.TickFrequency = 1;
 			Joint5Slider.IsSnapToTickEnabled = true;
 			Joint5Slider.TickFrequency = 1;
+			Joint5Slider.LargeChange = 10;
 
 			Joint6Slider.Minimum = -180;
 			Joint6Slider.Maximum = 180;
 			Joint6Slider.TickFrequency = 1;
 			Joint6Slider.IsSnapToTickEnabled = true;
 			Joint6Slider.TickFrequency = 1;
+			Joint6Slider.LargeChange = 10;
 
 			Joint1TextBlock.Text = ((int)Joint1Slider.Value).ToString();
 			Joint2TextBlock.Text = ((int)Joint2Slider.Value).ToString();
@@ -85,7 +91,13 @@ namespace ABB_Kinect
 			Joint5TextBlock.Text = ((int)Joint5Slider.Value).ToString();
 			Joint6TextBlock.Text = ((int)Joint6Slider.Value).ToString();
 
-			GetCurrentJointsAngles();
+			this.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				GetCurrentJointsAngles();
+				UpdateTextBlockValues();
+				TurnONJointsEvents();
+			}));
 		}
 
 		private void InitializeTimer()
@@ -170,6 +182,34 @@ namespace ABB_Kinect
 			}
 		}
 
+		private void TurnOFFJointsEvents()
+		{
+			this.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				Joint1Slider.ValueChanged -= Joint1Slider_ValueChanged;
+				Joint2Slider.ValueChanged -= Joint2Slider_ValueChanged;
+				Joint3Slider.ValueChanged -= Joint3Slider_ValueChanged;
+				Joint4Slider.ValueChanged -= Joint4Slider_ValueChanged;
+				Joint5Slider.ValueChanged -= Joint5Slider_ValueChanged;
+				Joint6Slider.ValueChanged -= Joint6Slider_ValueChanged;
+			}));
+		}
+
+		private void TurnONJointsEvents()
+		{
+			this.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				Joint1Slider.ValueChanged += Joint1Slider_ValueChanged;
+				Joint2Slider.ValueChanged += Joint2Slider_ValueChanged;
+				Joint3Slider.ValueChanged += Joint3Slider_ValueChanged;
+				Joint4Slider.ValueChanged += Joint4Slider_ValueChanged;
+				Joint5Slider.ValueChanged += Joint5Slider_ValueChanged;
+				Joint6Slider.ValueChanged += Joint6Slider_ValueChanged;
+			}));
+		}
+
 		private JointTarget GetAnglesFromSliders(JointTarget a)
 		{
 			JointTarget angles = a;
@@ -202,6 +242,26 @@ namespace ABB_Kinect
 			Joint4Slider.Value = angles.RobAx.Rax_4;
 			Joint5Slider.Value = angles.RobAx.Rax_5;
 			Joint6Slider.Value = angles.RobAx.Rax_6;
+		}
+
+		private void AnySliderValueChanged(Slider slider, TextBlock textBlock)
+		{
+			this.Dispatcher.Invoke
+			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+			{
+				textBlock.Text = ((int)slider.Value).ToString();
+				SetNewJointsAngles();
+			}));
+		}
+
+		private void UpdateTextBlockValues()
+		{
+			AnySliderValueChanged(Joint1Slider, Joint1TextBlock);
+			AnySliderValueChanged(Joint2Slider, Joint2TextBlock);
+			AnySliderValueChanged(Joint3Slider, Joint3TextBlock);
+			AnySliderValueChanged(Joint4Slider, Joint4TextBlock);
+			AnySliderValueChanged(Joint5Slider, Joint5TextBlock);
+			AnySliderValueChanged(Joint6Slider, Joint6TextBlock);
 		}
 
 		private void ReadyState() // Green light, enabled controls...
@@ -278,6 +338,19 @@ namespace ABB_Kinect
 						rapidBool.Value = true;
 						FlagExec.Value = rapidBool;
 					}
+					this.Dispatcher.Invoke
+					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+					{
+						TurnOFFJointsEvents();
+						Joint1Slider.Value = 0;
+						Joint2Slider.Value = 0;
+						Joint3Slider.Value = 0;
+						Joint4Slider.Value = -90;
+						Joint5Slider.Value = 0;
+						Joint6Slider.Value = 0;
+						TurnONJointsEvents();
+						UpdateTextBlockValues();
+					}));
 				}
 				else
 					MessageBox.Show("Automatic mode is required to start execution from a remote client.");
@@ -294,37 +367,32 @@ namespace ABB_Kinect
 
 		private void Joint1Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			this.Dispatcher.Invoke
-			(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
-			{
-				Joint1TextBlock.Text = ((int)Joint1Slider.Value).ToString();
-				SetNewJointsAngles();
-			}));
+			AnySliderValueChanged(sender as Slider, Joint1TextBlock);
 		}
 
 		private void Joint2Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			Joint2TextBlock.Text = ((int)Joint2Slider.Value).ToString();
+			AnySliderValueChanged(sender as Slider, Joint2TextBlock);
 		}
 
 		private void Joint3Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			Joint3TextBlock.Text = ((int)Joint3Slider.Value).ToString();
+			AnySliderValueChanged(sender as Slider, Joint3TextBlock);
 		}
 
 		private void Joint4Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			Joint4TextBlock.Text = ((int)Joint4Slider.Value).ToString();
+			AnySliderValueChanged(sender as Slider, Joint4TextBlock);
 		}
 
 		private void Joint5Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			Joint5TextBlock.Text = ((int)Joint5Slider.Value).ToString();
+			AnySliderValueChanged(sender as Slider, Joint5TextBlock);
 		}
 
 		private void Joint6Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
-			Joint6TextBlock.Text = ((int)Joint6Slider.Value).ToString();
+			AnySliderValueChanged(sender as Slider, Joint6TextBlock);
 		}
 	
 	}

@@ -18,12 +18,12 @@
 						<Label Content="Joint 4" HorizontalAlignment="Left" Margin="10,88,0,0" VerticalAlignment="Top"/>
 						<Label Content="Joint 5" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top"/>
 						<Label Content="Joint 6" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top"/>
-						<Slider x:Name="Joint1Slider" HorizontalAlignment="Left" Margin="55,13,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint1Slider_ValueChanged"/>
-						<Slider x:Name="Joint2Slider" HorizontalAlignment="Left" Margin="55,41,0,0" VerticalAlignment="Top" RenderTransformOrigin="-11.75,-0.833" Width="306" ValueChanged="Joint2Slider_ValueChanged"/>
-						<Slider x:Name="Joint3Slider" HorizontalAlignment="Left" Margin="55,67,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint3Slider_ValueChanged"/>
-						<Slider x:Name="Joint4Slider" HorizontalAlignment="Left" Margin="55,93,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint4Slider_ValueChanged"/>
-						<Slider x:Name="Joint5Slider" HorizontalAlignment="Left" Margin="55,119,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint5Slider_ValueChanged"/>
-						<Slider x:Name="Joint6Slider" HorizontalAlignment="Left" Margin="55,145,0,0" VerticalAlignment="Top" Width="306" ValueChanged="Joint6Slider_ValueChanged"/>
+						<Slider x:Name="Joint1Slider" HorizontalAlignment="Left" Margin="55,13,0,0" VerticalAlignment="Top" Width="306"/>
+						<Slider x:Name="Joint2Slider" HorizontalAlignment="Left" Margin="55,41,0,0" VerticalAlignment="Top" RenderTransformOrigin="-11.75,-0.833" Width="306"/>
+						<Slider x:Name="Joint3Slider" HorizontalAlignment="Left" Margin="55,67,0,0" VerticalAlignment="Top" Width="306"/>
+						<Slider x:Name="Joint4Slider" HorizontalAlignment="Left" Margin="55,93,0,0" VerticalAlignment="Top" Width="306"/>
+						<Slider x:Name="Joint5Slider" HorizontalAlignment="Left" Margin="55,119,0,0" VerticalAlignment="Top" Width="306"/>
+						<Slider x:Name="Joint6Slider" HorizontalAlignment="Left" Margin="55,145,0,0" VerticalAlignment="Top" Width="306"/>
 						<TextBlock x:Name="Joint1TextBlock" HorizontalAlignment="Left" Margin="366,13,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<TextBlock x:Name="Joint2TextBlock" HorizontalAlignment="Left" Margin="366,41,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<TextBlock x:Name="Joint3TextBlock" HorizontalAlignment="Left" Margin="366,67,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
