@@ -33,8 +33,8 @@ namespace ABB_Kinect
 		private const int JOINT4MIN = -180;
 		private const int JOINT5MAX = 90;
 		private const int JOINT5MIN = -90;
-		private const int JOINT6MAX = 120;
-		private const int JOINT6MIN = -120;
+		private const int JOINT6MAX = 80;
+		private const int JOINT6MIN = -80;
 
 		private Controller ABBController = null;
 		private RapidData FlagExec = null;
