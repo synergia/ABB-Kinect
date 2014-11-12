@@ -291,7 +291,10 @@ namespace ABB_Kinect
 		private void BusyState() // Yellow light, disabled controls...
 		{
 			ReadyLED.Background = Brushes.Yellow;
-			TabControl.IsEnabled = false;
+			if (DynamicModeCheckBox.IsChecked == false)
+				TabControl.IsEnabled = false;
+			else
+				TabControl.IsEnabled = true;
 			ResetPositionButton.IsEnabled = false;
 		}
 
@@ -453,6 +456,13 @@ namespace ABB_Kinect
 				}
 				ABBController.MotionSystem.SpeedRatio = NumValue;
 			}));
+		}
+
+		private void ABBConnectionWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			SupervisorTimer.Elapsed -= SupervisorTimerElapsed;
+			SupervisorTimer.Enabled = false;
+			SupervisorTimer = null;
 		}
 	
 	}
