@@ -23,18 +23,18 @@ namespace ABB_Kinect
 	public partial class ABBConnectionWindow : Window
 	{
 		// Experimental constants to avoid crashes
-		private const int JOINT1MAX = 180;
-		private const int JOINT1MIN = -180;
-		private const int JOINT2MAX = 180;
-		private const int JOINT2MIN = -180;
-		private const int JOINT3MAX = 180;
-		private const int JOINT3MIN = -180;
+		private const int JOINT1MAX = 20;
+		private const int JOINT1MIN = -20;
+		private const int JOINT2MAX = 10;
+		private const int JOINT2MIN = -10;
+		private const int JOINT3MAX = 20;
+		private const int JOINT3MIN = -20;
 		private const int JOINT4MAX = 180;
 		private const int JOINT4MIN = -180;
-		private const int JOINT5MAX = 180;
-		private const int JOINT5MIN = -180;
-		private const int JOINT6MAX = 180;
-		private const int JOINT6MIN = -180;
+		private const int JOINT5MAX = 90;
+		private const int JOINT5MIN = -90;
+		private const int JOINT6MAX = 120;
+		private const int JOINT6MIN = -120;
 
 		private Controller ABBController = null;
 		private RapidData FlagExec = null;
@@ -313,34 +313,41 @@ namespace ABB_Kinect
 					this.Dispatcher.Invoke
 					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
 					{
-						tasks = ABBController.Rapid.GetTasks();
-						if (tasks[0].ExecutionStatus.ToString() == "Running")
+						try
 						{
-							FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
-
-							ReadyLED.Dispatcher.Invoke
-							(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+							tasks = ABBController.Rapid.GetTasks();
+							if (tasks[0].ExecutionStatus.ToString() == "Running")
 							{
-								if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagExec.Value == true)
+								FlagExec = tasks[0].GetRapidData("MainModule", "flag_exec");
+
+								ReadyLED.Dispatcher.Invoke
+								(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
 								{
-									BusyState();
-								}
-								else // false
-								{
-									ReadyState();
-								}
-							}));
-						}
-						else
-						{
-							SupervisorTimer.Enabled = false;
-							RapidData FlagOutOfRange = tasks[0].GetRapidData("MainModule", "flag_out_of_range");
-							if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagOutOfRange.Value == true)
-								MessageBox.Show("Program stopped because of dangerous joint angles\nPlease back manually to safe position",
-									"ABB Out of range", MessageBoxButton.OK, MessageBoxImage.Warning);
+									if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagExec.Value == true)
+									{
+										BusyState();
+									}
+									else // false
+									{
+										ReadyState();
+									}
+								}));
+							}
 							else
-								MessageBox.Show("Run program on ABB first!", "ABB Error", MessageBoxButton.OK, MessageBoxImage.Error);
-							this.Close();
+							{
+								SupervisorTimer.Enabled = false;
+								RapidData FlagOutOfRange = tasks[0].GetRapidData("MainModule", "flag_out_of_range");
+								if ((ABB.Robotics.Controllers.RapidDomain.Bool)FlagOutOfRange.Value == true)
+									MessageBox.Show("Program stopped because of dangerous joint angles\nPlease back manually to safe position",
+										"ABB Out of range", MessageBoxButton.OK, MessageBoxImage.Warning);
+								else
+									MessageBox.Show("Run program on ABB first!", "ABB Error", MessageBoxButton.OK, MessageBoxImage.Error);
+								this.Close();
+							}
+						}
+						catch (System.Exception ex)
+						{
+							SupervisorTimer = null;
 						}
 					}));
 				}
@@ -460,9 +467,12 @@ namespace ABB_Kinect
 
 		private void ABBConnectionWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
 		{
-			SupervisorTimer.Elapsed -= SupervisorTimerElapsed;
-			SupervisorTimer.Enabled = false;
-			SupervisorTimer = null;
+			if (SupervisorTimer != null)
+			{
+				SupervisorTimer.Elapsed -= SupervisorTimerElapsed;
+				SupervisorTimer.Enabled = false;
+				SupervisorTimer = null;
+			}
 		}
 	
 	}
