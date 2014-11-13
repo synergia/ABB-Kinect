@@ -345,7 +345,7 @@ namespace ABB_Kinect
 								this.Close();
 							}
 						}
-						catch (System.Exception ex)
+						catch
 						{
 							SupervisorTimer = null;
 						}
@@ -474,6 +474,21 @@ namespace ABB_Kinect
 				SupervisorTimer = null;
 			}
 		}
-	
+
+		private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			if (TabControl.SelectedContent != null)
+			{
+				if(((sender as TabControl).SelectedItem as TabItem).Header.ToString() == "Manual Mode")
+				{
+					this.Dispatcher.Invoke
+					(System.Windows.Threading.DispatcherPriority.Normal, new Action(delegate()
+					{
+						GetCurrentJointsAngles();
+						UpdateTextBlockValues();
+					}));
+				}
+			}
+		}
 	}
 }

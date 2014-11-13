@@ -9,7 +9,7 @@
 			<TextBlock x:Name="ABBWindowTitleLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="427" Margin="10,0,0,0" FontSize="20" FontWeight="Bold"><Run Language="en-gb" Text="Connected to "/></TextBlock>
 			<TextBlock x:Name="ABBWindowNameLabel" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="427"><Run Language="en-gb" Text="Controller Name"/></TextBlock>
 			<Button x:Name="ResetPositionButton" Content="Reset Position" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Width="90" FontStyle="Italic" Foreground="#FF087A03" Click="ResetPositionButton_Click"/>
-			<TabControl x:Name="TabControl" HorizontalAlignment="Left" Height="285" Margin="10,73,0,0" VerticalAlignment="Top" Width="432">
+			<TabControl x:Name="TabControl" HorizontalAlignment="Left" Height="285" Margin="10,73,0,0" VerticalAlignment="Top" Width="432" SelectionChanged="TabControl_SelectionChanged">
 				<TabItem Header="Manual Mode" Margin="-2,0" RenderTransformOrigin="1.746,0.545">
 					<Grid Background="#FFE5E5E5">
 						<Label Content="Joint 1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,-0.346"/>
