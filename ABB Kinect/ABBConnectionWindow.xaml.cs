@@ -62,6 +62,8 @@ namespace ABB_Kinect
 				this.TryAgainButton = TryAgainButton;
 				this.KinectNotFoundTextBlock = KinectNotFoundTextBlock;
 
+				this.TryAgainButton.Click += TryAgainButton_Click;
+
 				if(!FindKinect())
 				{
 					SetKinectFoundControls(false);
@@ -69,27 +71,7 @@ namespace ABB_Kinect
 				else
 				{
 					SetKinectFoundControls(true);
-
-					this.DrawingGroup = new DrawingGroup();
-					this.ImageSource = new DrawingImage(this.DrawingGroup);
-					ImageDisplay.Source = this.ImageSource;
-
-					if (this.Sensor != null) // Unnecessary, but better do
-					{
-						this.Sensor.SkeletonStream.Enable();
-						this.Sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
-
-						// Start the sensor!
-						try
-						{
-							this.Sensor.Start();
-						}
-						catch (IOException)
-						{
-							this.Sensor = null;
-							SetKinectFoundControls(false);
-						}
-					}
+					StartConnection();					
 				}
 			}
 			~MyKinect()
@@ -97,7 +79,11 @@ namespace ABB_Kinect
 				if (this.Sensor != null)
 					this.Sensor.Stop();
 			}
-
+			public void DisconnectKinect()
+			{
+				if (this.Sensor != null)
+					this.Sensor.Stop();
+			}
 			private bool FindKinect()
 			{
 				/*
@@ -128,6 +114,29 @@ namespace ABB_Kinect
 					TryAgainButton.IsEnabled = true;
 
 					KinectNotFoundTextBlock.Visibility = Visibility.Visible;
+				}
+			}
+			private void StartConnection()
+			{
+				this.DrawingGroup = new DrawingGroup();
+				this.ImageSource = new DrawingImage(this.DrawingGroup);
+				ImageDisplay.Source = this.ImageSource;
+
+				if (this.Sensor != null) // Unnecessary, but better do
+				{
+					this.Sensor.SkeletonStream.Enable();
+					this.Sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+
+					// Start the sensor!
+					try
+					{
+						this.Sensor.Start();
+					}
+					catch (IOException)
+					{
+						this.Sensor = null;
+						SetKinectFoundControls(false);
+					}
 				}
 			}
 
@@ -297,6 +306,18 @@ namespace ABB_Kinect
 					}
 
 					this.DrawingGroup.ClipGeometry = new RectangleGeometry(new Rect(0.0, 0.0, RenderWidth, RenderHeight));
+				}
+			}
+			private void TryAgainButton_Click(object sender, RoutedEventArgs e)
+			{
+				if (!FindKinect())
+				{
+					SetKinectFoundControls(false);
+				}
+				else
+				{
+					SetKinectFoundControls(true);
+					StartConnection();
 				}
 			}
 		}
@@ -753,6 +774,11 @@ namespace ABB_Kinect
 				SupervisorTimer.Enabled = false;
 				SupervisorTimer = null;
 			}
+			if (KinectDevice != null)
+			{
+				KinectDevice.DisconnectKinect();
+				KinectDevice = null;
+			}
 		}
 
 		private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -767,7 +793,13 @@ namespace ABB_Kinect
 						GetCurrentJointsAngles();
 						UpdateTextBlockValues();
 
-						KinectDevice = null;
+						if (KinectDevice != null)
+						{
+							KinectDevice.DisconnectKinect();
+							KinectDevice = null;
+							ResetPositionButton.IsEnabled = true;
+						}
+						TabControl.IsEnabled = true;
 					}));
 				}
 				else
