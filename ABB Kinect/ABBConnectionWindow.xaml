@@ -36,7 +36,15 @@
 					</Grid>
 				</TabItem>
 				<TabItem Header="Kinect Mode">
-					<Grid Background="#FFE5E5E5"/>
+					<Grid Background="#FFE5E5E5">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="55*"/>
+							<ColumnDefinition Width="371*"/>
+						</Grid.ColumnDefinitions>
+						<Image x:Name="KinectImageControl" HorizontalAlignment="Left" Height="237" Margin="10,10,0,0" VerticalAlignment="Top" Width="316" Grid.ColumnSpan="2"/>
+						<Button x:Name="TryAgainButton" Content="Try again" Grid.Column="1" HorizontalAlignment="Left" Margin="286,227,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+						<TextBlock x:Name="KinectNotFoundTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="286,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="10" Foreground="Red"><Run Language="en-gb" Text="Kinect not found"/></TextBlock>
+					</Grid>
 				</TabItem>
 			</TabControl>
 			<Image HorizontalAlignment="Left" Height="112" Margin="491,246,0,0" VerticalAlignment="Top" Width="113" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\logo_wmech.gif" RenderTransformOrigin="0.923,0.448"/>

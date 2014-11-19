@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Debug\
+C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Release\
 ABB_Kinect
 none
 false
-DEBUG;TRACE
+TRACE
 C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\App.xaml
 21858188526
 
-10-71942571
+6-912470447
 16-1239663639
 ABBConnectionWindow.xaml;MainWindow.xaml;
 

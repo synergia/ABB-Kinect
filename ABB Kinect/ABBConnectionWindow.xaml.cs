@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using Microsoft.Kinect;
+
 using ABB.Robotics.Controllers;
 using ABB.Robotics.Controllers.RapidDomain;
 
@@ -22,6 +24,87 @@ namespace ABB_Kinect
 	/// </summary>
 	public partial class ABBConnectionWindow : Window
 	{
+		public class MyKinect
+		{
+			private const float RenderWidth = 316.0f;
+			private const float RenderHeight = 237.0f;
+			private const double JointThickness = 3;
+			private const double BodyCenterThickness = 10;
+			private const double ClipBoundsThickness = 10;
+
+			// Brush used to draw skeleton center point
+			private readonly Brush CenterPointBrush = Brushes.Blue;
+			// Brush used for drawing joints that are currently tracked
+			private readonly Brush TrackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
+			// Brush used for drawing joints that are currently inferred
+			private readonly Brush InferredJointBrush = Brushes.Yellow;
+			// Pen used for drawing bones that are currently tracked
+			private readonly Pen TrackedBonePen = new Pen(Brushes.Green, 6);
+			// Pen used for drawing bones that are currently inferred
+			private readonly Pen InferredBonePen = new Pen(Brushes.Gray, 1);
+			// Active Kinect sensor
+			private KinectSensor Sensor;
+			// Drawing group for skeleton rendering output
+			private DrawingGroup DrawingGroup;
+			// Drawing image that we will display
+			private DrawingImage ImageSource;
+			// Window to display image
+			private Image ImageDisplay;
+
+			private Button TryAgainButton;
+			private TextBlock KinectNotFoundTextBlock;
+
+			public MyKinect(Image ImageDisplay, Button TryAgainButton, TextBlock KinectNotFoundTextBlock)
+			{
+				// Complete member initialization
+				this.ImageDisplay = ImageDisplay;
+				this.TryAgainButton = TryAgainButton;
+				this.KinectNotFoundTextBlock = KinectNotFoundTextBlock;
+
+				if(!FindKinect())
+				{
+					SetKinectFoundControls(false);
+				}
+				else
+				{
+					SetKinectFoundControls(true);
+				}
+			}
+
+			private bool FindKinect()
+			{
+				/*
+				 * Look trough all sensors and start the first connected one.
+				 */
+				foreach (var potentialSensor in KinectSensor.KinectSensors)
+				{
+					if (potentialSensor.Status == KinectStatus.Connected)
+					{
+						this.Sensor = potentialSensor;
+						return true;
+					}
+				}
+				return false;
+			}
+			private void SetKinectFoundControls(bool b)
+			{
+				if (b) // Kinect was found
+				{
+					TryAgainButton.Visibility = Visibility.Hidden;
+					TryAgainButton.IsEnabled = false;
+
+					KinectNotFoundTextBlock.Visibility = Visibility.Hidden;
+				}
+				else
+				{
+					TryAgainButton.Visibility = Visibility.Visible;
+					TryAgainButton.IsEnabled = true;
+
+					KinectNotFoundTextBlock.Visibility = Visibility.Visible;
+				}
+			}
+
+		}
 		// Experimental constants to avoid crashes
 		private const int JOINT1MAX = 20;
 		private const int JOINT1MIN = -20;
@@ -40,6 +123,8 @@ namespace ABB_Kinect
 		private RapidData FlagExec = null;
 		private Task[] tasks = null;
 		private Timer SupervisorTimer = null;
+
+		private MyKinect KinectDevice = null;
 
 		public ABBConnectionWindow(Controller controller)
 		{
@@ -486,7 +571,13 @@ namespace ABB_Kinect
 					{
 						GetCurrentJointsAngles();
 						UpdateTextBlockValues();
+
+						KinectDevice = null;
 					}));
+				}
+				else
+				{
+					KinectDevice = new MyKinect(KinectImageControl, TryAgainButton, KinectNotFoundTextBlock);
 				}
 			}
 		}
