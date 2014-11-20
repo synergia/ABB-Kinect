@@ -54,25 +54,22 @@ namespace ABB_Kinect
 
 			private Button TryAgainButton;
 			private TextBlock KinectNotFoundTextBlock;
+			private TextBlock ArmAngleTextBlock;
 
-			public MyKinect(Image ImageDisplay, Button TryAgainButton, TextBlock KinectNotFoundTextBlock)
+			// Angles
+			private int LeftArmAngle;
+			public int GetLeftArmAngle() { return LeftArmAngle; }
+
+			public MyKinect(Image ImageDisplay, Button TryAgainButton, TextBlock KinectNotFoundTextBlock, TextBlock ArmAngleTextBlock)
 			{
 				// Complete member initialization
 				this.ImageDisplay = ImageDisplay;
 				this.TryAgainButton = TryAgainButton;
 				this.KinectNotFoundTextBlock = KinectNotFoundTextBlock;
+				this.ArmAngleTextBlock = ArmAngleTextBlock;
 
 				this.TryAgainButton.Click += TryAgainButton_Click;
-
-				if(!FindKinect())
-				{
-					SetKinectFoundControls(false);
-				}
-				else
-				{
-					SetKinectFoundControls(true);
-					StartConnection();					
-				}
+				SetKinectFoundControls(false);
 			}
 			~MyKinect()
 			{
@@ -137,6 +134,20 @@ namespace ABB_Kinect
 						this.Sensor = null;
 						SetKinectFoundControls(false);
 					}
+				}
+			}
+			private void CalculateAngles(Skeleton skeleton)
+			{
+				Joint ElbowLeft = skeleton.Joints[JointType.ElbowLeft];
+				Joint ShoulderLeft = skeleton.Joints[JointType.ShoulderLeft];
+
+				if (ElbowLeft.Position.X < ShoulderLeft.Position.X)
+				{
+					double alfa;
+					alfa = -Math.Atan((ElbowLeft.Position.Y - ShoulderLeft.Position.Y) / Math.Sqrt(Math.Pow(ElbowLeft.Position.X - ShoulderLeft.Position.X,2) + Math.Pow(ElbowLeft.Position.Z - ShoulderLeft.Position.Z,2)));
+					LeftArmAngle = Convert.ToInt32(alfa * 180 / Math.PI);
+
+					ArmAngleTextBlock.Text = LeftArmAngle.ToString();
 				}
 			}
 
@@ -292,6 +303,7 @@ namespace ABB_Kinect
 							if (skel.TrackingState == SkeletonTrackingState.Tracked)
 							{
 								this.DrawBonesAndJoints(skel, dc);
+								this.CalculateAngles(skel);
 							}
 							else if (skel.TrackingState == SkeletonTrackingState.PositionOnly)
 							{
@@ -631,6 +643,15 @@ namespace ABB_Kinect
 									else // false
 									{
 										ReadyState();
+										if (KinectDevice != null)
+										{
+											if (KinectDevice.GetLeftArmAngle() >= JOINT3MAX)
+												Joint3Slider.Value = JOINT3MAX;
+											else if (KinectDevice.GetLeftArmAngle() <= JOINT3MIN)
+												Joint3Slider.Value = JOINT3MIN;
+											else
+												Joint3Slider.Value = KinectDevice.GetLeftArmAngle();
+										}
 									}
 								}));
 							}
@@ -804,7 +825,7 @@ namespace ABB_Kinect
 				}
 				else
 				{
-					KinectDevice = new MyKinect(KinectImageControl, TryAgainButton, KinectNotFoundTextBlock);
+					KinectDevice = new MyKinect(KinectImageControl, TryAgainButton, KinectNotFoundTextBlock, ArmAngleTextBlock);
 				}
 			}
 		}

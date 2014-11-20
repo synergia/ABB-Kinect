@@ -31,8 +31,6 @@
 						<TextBlock x:Name="Joint5TextBlock" HorizontalAlignment="Left" Margin="366,119,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<TextBlock x:Name="Joint6TextBlock" HorizontalAlignment="Left" Margin="366,145,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 						<CheckBox x:Name="DynamicModeCheckBox" Content="Dynamic Mode" HorizontalAlignment="Left" Margin="55,174,0,0" VerticalAlignment="Top" IsEnabled="False"/>
-						<TextBox x:Name="SpeedTxtControl" HorizontalAlignment="Left" Height="16" Margin="366,172,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="30" RenderTransformOrigin="-0.213,0.348"/>
-						<Label Content="Speed (0 - 100)" HorizontalAlignment="Left" Margin="270,168,0,0" VerticalAlignment="Top"/>
 					</Grid>
 				</TabItem>
 				<TabItem Header="Kinect Mode">
@@ -42,8 +40,10 @@
 							<ColumnDefinition Width="371*"/>
 						</Grid.ColumnDefinitions>
 						<Image x:Name="KinectImageControl" HorizontalAlignment="Left" Height="237" Margin="10,10,0,0" VerticalAlignment="Top" Width="316" Grid.ColumnSpan="2"/>
-						<Button x:Name="TryAgainButton" Content="Try again" Grid.Column="1" HorizontalAlignment="Left" Margin="286,227,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
-						<TextBlock x:Name="KinectNotFoundTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="286,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="10" Foreground="Red"><Run Language="en-gb" Text="Kinect not found"/></TextBlock>
+						<Button x:Name="TryAgainButton" Content="Connect" Grid.Column="1" HorizontalAlignment="Left" Margin="286,227,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
+						<TextBlock x:Name="KinectNotFoundTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="286,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="8" Foreground="Red"><Run Language="en-gb" Text="Kinect disconnected"/></TextBlock>
+						<Label Content="Arm angle" Grid.Column="1" HorizontalAlignment="Left" Margin="276,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
+						<TextBlock x:Name="ArmAngleTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="345,15,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="26" RenderTransformOrigin="3,-1.378"/>
 					</Grid>
 				</TabItem>
 			</TabControl>
@@ -51,6 +51,8 @@
 			<Image HorizontalAlignment="Left" Height="58" Margin="329,363,0,0" VerticalAlignment="Top" Width="275" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\Pwr-logo.png" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="1"/>
 			<Border x:Name="ReadyLED" BorderBrush="Black" Background="Red" BorderThickness="1" HorizontalAlignment="Left" Height="20" Margin="417,73,0,0" VerticalAlignment="Top" Width="20"/>
 			<Label Content="Created by Marcin Twardak" HorizontalAlignment="Left" Margin="243,72,0,0" VerticalAlignment="Top" Width="169" FontWeight="Bold"/>
+			<TextBox x:Name="SpeedTxtControl" HorizontalAlignment="Left" Height="16" Margin="201,52,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="30" RenderTransformOrigin="-0.213,0.348"/>
+			<Label Content="Speed (0 - 100)" HorizontalAlignment="Left" Margin="105,47,0,0" VerticalAlignment="Top"/>
 		</Grid>
 
 	</Grid>
