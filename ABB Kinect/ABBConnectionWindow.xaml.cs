@@ -55,18 +55,34 @@ namespace ABB_Kinect
 			private Button TryAgainButton;
 			private TextBlock KinectNotFoundTextBlock;
 			private TextBlock ArmAngleTextBlock;
+			private TextBlock BodyAngleTextBlock;
+			private TextBlock ElbowAngleTextBlock;
+			private TextBlock ElbowRotTextBlock;
+			private Ellipse GoLED;
 
 			// Angles
 			private int LeftArmAngle;
 			public int GetLeftArmAngle() { return LeftArmAngle; }
+			private int BodyAngle;
+			public int GetBodyAngle() { return BodyAngle; }
+			private int ElbowAngle;
+			public int GetElbowAngle() { return ElbowAngle; }
+			private int ElbowRot;
+			public int GetElbowRot() { return ElbowRot; }
 
-			public MyKinect(Image ImageDisplay, Button TryAgainButton, TextBlock KinectNotFoundTextBlock, TextBlock ArmAngleTextBlock)
+			public MyKinect(Image ImageDisplay, Button TryAgainButton, TextBlock KinectNotFoundTextBlock, TextBlock ArmAngleTextBlock, TextBlock BodyAngleTextBlock, TextBlock ElbowAngleTextBlock, TextBlock ElbowRotTextBlock, Ellipse GoLED)
 			{
 				// Complete member initialization
 				this.ImageDisplay = ImageDisplay;
 				this.TryAgainButton = TryAgainButton;
 				this.KinectNotFoundTextBlock = KinectNotFoundTextBlock;
 				this.ArmAngleTextBlock = ArmAngleTextBlock;
+				this.BodyAngleTextBlock = BodyAngleTextBlock;
+				this.ElbowAngleTextBlock = ElbowAngleTextBlock;
+				this.ElbowRotTextBlock = ElbowRotTextBlock;
+				this.GoLED = GoLED;
+
+				GoLED.Fill = Brushes.Red;
 
 				this.TryAgainButton.Click += TryAgainButton_Click;
 				SetKinectFoundControls(false);
@@ -138,17 +154,43 @@ namespace ABB_Kinect
 			}
 			private void CalculateAngles(Skeleton skeleton)
 			{
+				// if elbow right is above shoulder right allow robot to move
+				Joint HandRight = skeleton.Joints[JointType.HandRight];
+				Joint ShoulderRight = skeleton.Joints[JointType.ShoulderRight];
+
 				Joint ElbowLeft = skeleton.Joints[JointType.ElbowLeft];
 				Joint ShoulderLeft = skeleton.Joints[JointType.ShoulderLeft];
+				Joint HandLeft = skeleton.Joints[JointType.HandLeft];
 
 				if (ElbowLeft.Position.X < ShoulderLeft.Position.X)
 				{
+					if (HandRight.Position.Y > ShoulderRight.Position.Y)
+						GoLED.Fill = Brushes.LimeGreen;
+					else
+						GoLED.Fill = Brushes.Red;
+
 					double alfa;
+
 					alfa = -Math.Atan((ElbowLeft.Position.Y - ShoulderLeft.Position.Y) / Math.Sqrt(Math.Pow(ElbowLeft.Position.X - ShoulderLeft.Position.X,2) + Math.Pow(ElbowLeft.Position.Z - ShoulderLeft.Position.Z,2)));
 					LeftArmAngle = Convert.ToInt32(alfa * 180 / Math.PI);
 
+					alfa = Math.Atan((ElbowLeft.Position.Z - ShoulderLeft.Position.Z) / (ElbowLeft.Position.X - ShoulderLeft.Position.X));
+					BodyAngle = Convert.ToInt32(alfa * 180 / Math.PI);
+
+					// c^2 = a^2 + b^2 - 2abcosalfa
+					double aa = Math.Pow(ElbowLeft.Position.Y - ShoulderLeft.Position.Y, 2)+Math.Pow(ElbowLeft.Position.X - ShoulderLeft.Position.X, 2)+Math.Pow(ElbowLeft.Position.Z - ShoulderLeft.Position.Z, 2);
+					double bb = Math.Pow(HandLeft.Position.Y - ElbowLeft.Position.Y, 2) + Math.Pow(HandLeft.Position.X - ElbowLeft.Position.X, 2) + Math.Pow(HandLeft.Position.Z - ElbowLeft.Position.Z, 2);
+					double cc = Math.Pow(HandLeft.Position.Y - ShoulderLeft.Position.Y, 2) + Math.Pow(HandLeft.Position.X - ShoulderLeft.Position.X, 2) + Math.Pow(HandLeft.Position.Z - ShoulderLeft.Position.Z, 2);
+
+					alfa = -(Math.Acos((aa+bb-cc)/(2 * Math.Sqrt(aa)*Math.Sqrt(bb))) - Math.PI);
+					ElbowAngle = Convert.ToInt32(alfa * 180 / Math.PI);
+
 					ArmAngleTextBlock.Text = LeftArmAngle.ToString();
+					BodyAngleTextBlock.Text = BodyAngle.ToString();
+					ElbowAngleTextBlock.Text = ElbowAngle.ToString();
 				}
+				else
+					GoLED.Fill = Brushes.Red;
 			}
 
 			// DRAWING Functions
@@ -643,14 +685,32 @@ namespace ABB_Kinect
 									else // false
 									{
 										ReadyState();
-										if (KinectDevice != null)
+										if (KinectDevice != null && GoLED.Fill == Brushes.LimeGreen)
 										{
-											if (KinectDevice.GetLeftArmAngle() >= JOINT3MAX)
+											int alfa;
+											alfa = KinectDevice.GetLeftArmAngle();
+											if (alfa >= JOINT3MAX)
 												Joint3Slider.Value = JOINT3MAX;
-											else if (KinectDevice.GetLeftArmAngle() <= JOINT3MIN)
+											else if (alfa <= JOINT3MIN)
 												Joint3Slider.Value = JOINT3MIN;
 											else
-												Joint3Slider.Value = KinectDevice.GetLeftArmAngle();
+												Joint3Slider.Value = alfa;
+
+											alfa = KinectDevice.GetBodyAngle();
+											if (alfa >= JOINT1MAX)
+												Joint1Slider.Value = JOINT1MAX;
+											else if (alfa <= JOINT1MIN)
+												Joint1Slider.Value = JOINT1MIN;
+											else
+												Joint1Slider.Value = alfa;
+
+											alfa = KinectDevice.GetElbowAngle();
+											if (alfa >= JOINT5MAX)
+												Joint5Slider.Value = JOINT5MAX;
+											else if (alfa <= JOINT5MIN)
+												Joint5Slider.Value = JOINT5MIN;
+											else
+												Joint5Slider.Value = alfa;
 										}
 									}
 								}));
@@ -825,7 +885,7 @@ namespace ABB_Kinect
 				}
 				else
 				{
-					KinectDevice = new MyKinect(KinectImageControl, TryAgainButton, KinectNotFoundTextBlock, ArmAngleTextBlock);
+					KinectDevice = new MyKinect(KinectImageControl, TryAgainButton, KinectNotFoundTextBlock, ArmAngleTextBlock, BodyAngleTextBlock, ElbowAngleTextBlock, ElbowRotTextBlock, GoLED);
 				}
 			}
 		}
