@@ -15,3 +15,4 @@ C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\R
 C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Release\ABB Kinect.csproj.GenerateResource.Cache
 C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Release\ABB Kinect.exe
 C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Release\ABB Kinect.pdb
+C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\obj\Release\ABB Kinect.csprojResolveAssemblyReference.cache

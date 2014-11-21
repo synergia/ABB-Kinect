@@ -4,8 +4,8 @@
         Title="ABBConnectionWindow" Height="480" Width="640" ResizeMode="NoResize" Closing="ABBConnectionWindow_Closing">
 	<Grid>
 		<Grid HorizontalAlignment="Left" Height="431" Margin="10,10,0,0" VerticalAlignment="Top" Width="614">
-			<Image x:Name="ABB_Image" HorizontalAlignment="Left" Height="231" Margin="442,10,0,0" VerticalAlignment="Top" Width="162" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\handling-robots.jpg"/>
-			<Image HorizontalAlignment="Left" Height="58" Margin="10,363,0,0" VerticalAlignment="Top" Width="255" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\Logo_big.png"/>
+			<Image x:Name="ABB_Image" HorizontalAlignment="Left" Height="231" Margin="442,10,0,0" VerticalAlignment="Top" Width="162" Source="Resources\handling-robots.jpg"/>
+			<Image HorizontalAlignment="Left" Height="58" Margin="10,363,0,0" VerticalAlignment="Top" Width="255" Source="Resources\Logo_big.png"/>
 			<TextBlock x:Name="ABBWindowTitleLabel" HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Height="27" Width="427" Margin="10,0,0,0" FontSize="20" FontWeight="Bold"><Run Language="en-gb" Text="Connected to "/></TextBlock>
 			<TextBlock x:Name="ABBWindowNameLabel" HorizontalAlignment="Left" Margin="10,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="427"><Run Language="en-gb" Text="Controller Name"/></TextBlock>
 			<Button x:Name="ResetPositionButton" Content="Reset Position" HorizontalAlignment="Left" Margin="10,53,0,0" VerticalAlignment="Top" Width="90" FontStyle="Italic" Foreground="#FF087A03" Click="ResetPositionButton_Click"/>
@@ -42,25 +42,25 @@
 						<Image x:Name="KinectImageControl" HorizontalAlignment="Left" Height="237" Margin="10,10,0,0" VerticalAlignment="Top" Width="316" Grid.ColumnSpan="2"/>
 						<Button x:Name="TryAgainButton" Content="Connect" Grid.Column="1" HorizontalAlignment="Left" Margin="286,227,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False"/>
 						<TextBlock x:Name="KinectNotFoundTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="286,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="8" Foreground="Red"><Run Language="en-gb" Text="Kinect disconnected"/></TextBlock>
-						<Label Content="Arm" Grid.Column="1" HorizontalAlignment="Left" Margin="276,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
-						<TextBlock x:Name="ArmAngleTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="340,11,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="3,-1.378" FontSize="16"/>
-						<Label Content="Body" Grid.Column="1" HorizontalAlignment="Left" Margin="276,36,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
-						<TextBlock x:Name="BodyAngleTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="340,37,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="3,-1.378" FontSize="16"/>
-						<Label Content="Elbow" Grid.Column="1" HorizontalAlignment="Left" Margin="276,62,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
-						<TextBlock x:Name="ElbowAngleTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="340,63,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="3,-1.378" FontSize="16"/>
-						<Label Content="Rotation" Grid.Column="1" HorizontalAlignment="Left" Margin="276,88,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
-						<TextBlock x:Name="ElbowRotTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="340,89,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="21" RenderTransformOrigin="3,-1.378" FontSize="16"/>
+						<Label Content="Arm" Grid.Column="1" HorizontalAlignment="Left" Margin="271,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
+						<TextBlock x:Name="ArmAngleTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="336,11,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="3,-1.378" FontSize="16"/>
+						<Label Content="Body" Grid.Column="1" HorizontalAlignment="Left" Margin="271,36,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
+						<TextBlock x:Name="BodyAngleTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="336,37,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="3,-1.378" FontSize="16"/>
+						<Label Content="Elbow" Grid.Column="1" HorizontalAlignment="Left" Margin="271,62,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
+						<TextBlock x:Name="ElbowAngleTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="336,63,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="3,-1.378" FontSize="16"/>
+						<Label Content="Rotation" Grid.Column="1" HorizontalAlignment="Left" Margin="271,88,0,0" VerticalAlignment="Top" RenderTransformOrigin="-3.105,0.577" FontWeight="Bold"/>
+						<TextBlock x:Name="ElbowRotTextBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="336,89,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="35" RenderTransformOrigin="3,-1.378" FontSize="16"/>
 						<Ellipse x:Name="GoLED" Grid.Column="1" Fill="Red" HorizontalAlignment="Left" Height="48" Margin="304,156,0,0" Stroke="Black" VerticalAlignment="Top" Width="48" RenderTransformOrigin="0.6,1.35"/>
 						<Label Content="GO?" Grid.Column="1" HorizontalAlignment="Left" Margin="304,122,0,0" VerticalAlignment="Top" FontSize="20" FontWeight="Bold"/>
 					</Grid>
 				</TabItem>
 			</TabControl>
-			<Image HorizontalAlignment="Left" Height="112" Margin="491,246,0,0" VerticalAlignment="Top" Width="113" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\logo_wmech.gif" RenderTransformOrigin="0.923,0.448"/>
-			<Image HorizontalAlignment="Left" Height="58" Margin="329,363,0,0" VerticalAlignment="Top" Width="275" Source="C:\Users\Marcin\SkyDrive\Dokumenty\ABB Kinect\ABB\C#\ABB Kinect\ABB Kinect\Resources\Pwr-logo.png" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="1"/>
+			<Image HorizontalAlignment="Left" Height="112" Margin="491,246,0,0" VerticalAlignment="Top" Width="113" Source="Resources\logo_wmech.gif" RenderTransformOrigin="0.923,0.448"/>
+			<Image HorizontalAlignment="Left" Height="58" Margin="329,363,0,0" VerticalAlignment="Top" Width="275" Source="Resources\Pwr-logo.png" RenderOptions.BitmapScalingMode="HighQuality" Grid.Row="1"/>
 			<Border x:Name="ReadyLED" BorderBrush="Black" Background="Red" BorderThickness="1" HorizontalAlignment="Left" Height="20" Margin="417,73,0,0" VerticalAlignment="Top" Width="20"/>
 			<Label Content="Created by Marcin Twardak" HorizontalAlignment="Left" Margin="243,72,0,0" VerticalAlignment="Top" Width="169" FontWeight="Bold"/>
-			<TextBox x:Name="SpeedTxtControl" HorizontalAlignment="Left" Height="16" Margin="201,52,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="30" RenderTransformOrigin="-0.213,0.348"/>
-			<Label Content="Speed (0 - 100)" HorizontalAlignment="Left" Margin="105,47,0,0" VerticalAlignment="Top"/>
+			<TextBox x:Name="SpeedTxtControl" HorizontalAlignment="Left" Height="25" Margin="339,42,0,0" TextWrapping="Wrap" Text="25" VerticalAlignment="Top" Width="32" RenderTransformOrigin="-0.213,0.348"/>
+			<Label Content="Speed (0 - 100)" HorizontalAlignment="Left" Margin="243,42,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.473,0.577"/>
 		</Grid>
 
 	</Grid>
